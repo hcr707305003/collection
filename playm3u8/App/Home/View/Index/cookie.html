@@ -1,0 +1,134 @@
+<include file="header" />
+<body style="background-color: #f6f6f6;">
+  <include file="navbar" />
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h2>Cookie绑定列表</h2>
+            <br>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>id</th>
+                  <th>站点type</th>
+                  <th>账号ID</th>
+                  <th>状态</th>
+                  <th>操作</th></tr>
+              </thead>
+                <if condition="$config.cookie eq true">
+                  <foreach name="config.cookie" item="vo" key="k">
+                    <tbody>
+                      <tr>
+                        <th scope="row">{$k+1}</th>
+                        <td>{$vo.type}</td>
+                        <td>{$vo.user}</td>
+                        <td>
+                          <if condition="$vo.state eq true">√
+                            <else />X</if></td>
+                        <td>
+                          <a type="button" href="javascript:;" onclick="edit('{$k}','{$vo.type}','{$vo.user}','{$vo.cookie}','{$vo.api}')" class="btn btn-primary btn-xs">编辑</a>
+                          <a type="button" href="javascript:;" onclick="del('{$k}')" class="btn btn-danger btn-xs">删除</a></td>
+                      </tr>
+                    </tbody>
+                  </foreach>
+                <else />
+                  <tbody>
+                    <tr class="builder-data-empty">
+                      <td class="text-center empty-info" colspan="9"><br>暂时没有数据</td>
+                    </tr>
+                  </tbody>
+                </if>
+            </table>
+            <div class="form-group">
+              <label for="exampleInputName1">站点type</label>
+              <input type="text" class="form-control" id="type" placeholder="iqiyi">
+              <input type="text" style="display:none" id="type-id" value="">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputName1">账号名称</label>
+              <input type="text" class="form-control" id="user" placeholder="123456789@qq.com">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail2">Cookie信息 <a target="_blank" href="http://917.tzyee.net/list/2VTCu">帐号购买指引</a></label>
+              <textarea class="form-control" id="cookie" rows="2" placeholder="账号的登录Cookie"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputName1">回调解析服务器接口 <a target="_blank" href="index.php?a=downapi"> 获取回调接口</a> 接口文件放在任意国内的外网服务器上(BAE或SAE不要放)</label>
+              <input type="text" class="form-control" id="api" placeholder="http://123444.com/api.php">
+            </div>
+            <input type="button" id="submit-cookie" class="btn btn-primary btn-block" value="添加新信息">
+          </div>
+          <include file="footer"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript">
+  function edit(id, type, user, cookie,api) {
+    $("#type").val(type);
+    $("#user").val(user);
+    $("#cookie").val(cookie);
+    $("#api").val(api);
+    $("#type-id").val(id);
+    $("#submit-cookie").val("更新Cookie");
+  }
+  function del(id) {
+    $.post("index.php?a=cookie", {
+      "ct": "del",
+      "id": id
+    },
+    function(data) {
+      if (data.code != 200) {
+        msg('删除失败！');
+        return false;
+      } else {
+        window.location.href = 'index.php?a=cookie';
+      }
+    },
+    "json").error(function() {
+      msg('请求超时，或数据有误，请重试！');
+    });
+  }
+  $("#submit-cookie").on("click",
+  function() {
+    var id = $("#type-id").val();
+    var type = $("#type").val();
+    var user = $("#user").val();
+    var cookie = $("#cookie").val();
+    var api = $("#api").val();
+    if(type == 'tianyi'){
+      if(api != ""){
+        msg('此类型Cookie设置无需设置回调接口地址'); return false;
+      }
+    }
+    if (type == "" || user == "" || cookie == "") {
+      msg('添加信息不能为空！');
+    } else {
+      $.post("index.php?a=cookie", {
+        "ct": "add",
+        "id": id,
+        "type": type,
+        "user": user,
+        "cookie": cookie,
+        "api":api,
+      },
+      function(data) {
+        if (data.code != 200) {
+          msg(data.msg);
+          return false;
+        } else {
+          $("#type-id").val("");
+          $("#submit-cookie").val("添加新信息");
+          window.location.href = 'index.php?a=cookie';
+        }
+      },
+      "json").error(function() {
+        msg('请求超时，或数据有误，请重试！');
+      });
+    }
+  });</script>
+<include file="script" />
+</html>

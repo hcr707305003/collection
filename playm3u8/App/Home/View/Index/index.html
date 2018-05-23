@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="PlayM3u8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="__PUBLIC__/images/playm3u8.png">
+    <title>{$config.play_title}</title>
+    <if condition="!is_mobile()">
+      <link rel="stylesheet" href="__PUBLIC__/css/dplayer.min.css?v={:str_replace('.','',$config['Ver'])}">
+      <style type="text/css">body,html{background-color:#000;padding: 0;margin: 0;width:<?php echo $config['width_height'][0]?>;height:<?php echo $config['width_height'][1]?>;color:#aaa;}}</style>
+    <else />
+      <style type="text/css">body,html,div{background-color:#000;padding: 0;margin: 0;width:<?php echo $config['width_height'][0]?>;height:<?php echo $config['width_height'][1]?>;color:#aaa;}}</style>
+    </if>
+    <if condition="!is_mobile()">
+      <script type="text/javascript" src="__PUBLIC__/js/hls.min.js?v={:str_replace('.','',$config['Ver'])}"></script>
+      <script type="text/javascript" src="__PUBLIC__/js/dplayer.min.js?v={:str_replace('.','',$config['Ver'])}"></script>
+    </if>
+    <script type="text/javascript" src="__PUBLIC__/player/js/jquery.js?v={:str_replace('.','',$config['Ver'])}"></script>
+  </head>
+  <body style="overflow-y:hidden;">
+    <div id="loading" style="font-weight:bold;padding-top:120px;" align="center">
+        {$config.start_msg} . . .
+        <br><br>
+        <img border="0" <img src="__PUBLIC__/player/logo/load.gif" /></div>
+    <div id="a1" style="display:none;" class="dplayer"></div>
+    <div id="error" style="display:none;font-weight:bold;padding-top:120px;" align="center"></div>
+    <script type="text/javascript">
+        var PlayM3u8 = {:json_encode($config)};
+        PlayM3u8.refres = 1;
+        PlayM3u8.prefix = 'ajax_';
+        PlayM3u8.isiPad = navigator.userAgent.match(/iPad|iPhone|Linux|Android|iPod/i) != null;
+    </script>
+    <if condition="!is_mobile()">
+      <script type="text/javascript" src="__PUBLIC__/player/skin/ckplayer{$config.player_skin}/ckplayer.js?v={:str_replace('.','',$config['Ver'])}"></script>
+    </if>
+    <script type="text/javascript" src="__PUBLIC__/js/player.js?v={:str_replace('.','',$config['Ver'])}"></script>
+  </body>
+</html>

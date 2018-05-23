@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8">
+    <title>PlayM3u8插件在线更新</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <link rel="shortcut icon" href="__PUBLIC__/images/playm3u8.png">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/lyui.min.css">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/lyui.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/layer/layer.js"></script>
+  </head>
+  <body style="background-color: #f6f6f6;">
+    <div class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="sr-only">导航开关</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" target="_blank" href="index.php?url=">插件接口</a></div>
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav" id="step">
+            <li>
+              <a href="index.php?a=admin">系统设置</a></li>
+            <li>
+              <a href="index.php?a=cookie">Cookie绑定</a></li>
+            <li>
+              <a href="index.php?a=encrypt">加密设置</a></li>
+            <li>
+              <a href="index.php?a=other">其他设置</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="index.php?m=update">检查更新</a></li>
+            <li>
+              <a href="index.php?a=test">测试</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h2>PlayM3u8在线升级 <small> Ver {$config.Ver}</small></h2>
+              <br><br>
+                  <if condition="$config['Ver'] neq $json['ver']">
+                    <div id="abc1" class="row">
+                      <div class="col-md-8 col-md-offset-2">
+                      <h4>有新版本(Ver {$json.ver})，是否需要更新？</h4>
+                      </div>
+                    </div>
+                    <div id="abc3" style="display:none;">
+                      <div class="row">
+                        <div class="col-md-8 col-md-offset-4">
+                        <h5>正在更新，请稍等 . . .</h5>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                          <div class="progress">
+                              <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  <br><br>
+                  <div id="abc2" class="col-md-10 col-md-offset-2">
+                    <input type="button" id="submit" class="btn btn-primary pull-right" value="开 始 更 新"></div>
+                  </div>
+                <else />
+                    <div id="abc1" class="row">
+                      <div class="col-md-8 col-md-offset-2">
+                      <h4>当前版本(Ver {$json.ver})已经是最新了。</h4>
+                      </div>
+                    </div></div><br><br><br>
+                </if>
+               
+            <div class="panel-footer">
+              <span>版权所有 (c) 2015－2017 PlayM3u8云平台 保留所有权利。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+  $("#submit").on("click", function() {
+      $("#abc1").hide();
+      $("#abc2").hide();
+      $("#abc3").show();
+      $.get("index.php?m=update", function(data) {
+          layer.msg(data.msg,{offset: '100px',anim:5},
+          function(){
+              window.location.href = 'index.php?m=update';
+          });
+      },"json").error(function() {
+          msg("请求超时，或数据有误，请重试！");
+      });
+    });
+  </script>
+  <script type='text/javascript'>
+    $(function() {
+      $('[data-toggle="tooltip"]').tooltip()
+    });
+    function msg(str,id=6) {
+      layer.msg(str, {
+        offset: '100px',
+        anim: id
+      });
+    }
+  </script>
+</html>

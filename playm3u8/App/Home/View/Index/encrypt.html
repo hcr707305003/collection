@@ -1,0 +1,72 @@
+<include file="header"/>
+<body style="background-color: #f6f6f6;">
+    <include file="navbar"/>
+    <div class="container">
+        <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2>插件资源加密设置</h2><br>
+                    <div class="form-group">
+                        <label class="control-label">资源解密密钥 (需要配合CMS里的密钥一样自行修改,没有可以无视)</label>
+                        <div class="control-group">
+                            <input class="form-control" id="data_key" type="text" name="" value="null" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">需要加密的播放组类型 必须是CMS播放组里的类型，注意不是解析的type。(可以有多个，用“|”隔开)</label>
+                        <div class="control-group">
+                            <input class="form-control" id="encrypt_type" type="text" name="" value="null" placeholder="例如youku|iqiyi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">加密数据失效时间(单位毫秒) </label>
+                        <div class="control-group">
+                            <input class="form-control" id="encrypt_time" type="text" name="" value="null" placeholder="">
+                        </div>
+                    </div>
+                    <input type="button" id="submit-encrypt" class="btn btn-primary btn-block" value="提交修改">
+                </div>
+                <include file="footer"/>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+  var config = eval("(" + '{:json_encode($config)}' + ")");
+  $("#data_key").val(config.data_key);
+  $("#encrypt_type").val(config.encrypt_type);
+  $("#encrypt_time").val(config.encrypt_time);
+  $("#submit-encrypt").on("click",  function() {
+    var data_key = $("#data_key").val();
+    var encrypt_type = $("#encrypt_type").val();
+    var encrypt_time = $("#encrypt_time").val();
+    if(isNaN(encrypt_time)){
+      msg("失效时间格式错误，请用数字！");
+      return false;
+    }
+    if (data_key == "" || encrypt_time == "") {
+      msg('修改信息有误！');
+    } else {
+      $.post("index.php?a=encrypt", {
+        "key": data_key,
+        "type": encrypt_type,
+        "time": encrypt_time
+      },
+      function(data) {
+        if (data.code != 200) {
+          msg('添加失败！');
+          return false;
+        } else {
+          msg(data.msg,5);
+        }
+      },
+      "json").error(function() {
+        msg('请求超时，或数据有误，请重试！');
+      });
+    }
+  });
+</script>
+<include file="script"/>
+</html>

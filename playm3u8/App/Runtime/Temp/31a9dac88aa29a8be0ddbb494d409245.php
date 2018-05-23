@@ -1,0 +1,10 @@
+<?php
+//000000000020s:452:"#EXTM3U
+#EXT-X-VERSION:4
+#EXT-X-TARGETDURATION:301
+#EXT-X-MEDIA-SEQUENCE:0
+#EXTINF:346.303,
+http://data.vod.itc.cn/ipad?file=/122/74/KS2U0RbBQO9dJJLygR9E9Q.mp4&start=0&end=346.303&vid=4453124&plat=17&mkey=dB_OCON0rWpONGgkYua44Xd7VLBqIalA&ch=tv&user=api&SOHUSVP=gw3xTd45_pWtOwyhblItcO4qyiztT8ldX5NQwxpQsHs&uid=180410172657T6SN&pt=5&prod=h5&pg=1&eye=0&cv=1.0.0&qd=68001&src=11060001&ca=4&cateCode=&_c=1&appid=tv
+#EXT-X-DISCONTINUITY
+#EXT-X-ENDLIST";
+?>

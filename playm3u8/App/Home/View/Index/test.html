@@ -1,0 +1,38 @@
+<include file="header"/>
+<body style="background-color: #f6f6f6;">
+  <include file="navbar"/>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h2>在线播放测试</h2><br>
+            <div class="form-group">
+              <label class="control-label">站点URL播放地址</label>
+              <div class="control-group">
+                <input class="form-control" id="a-test" type="text" name="" value="http://v.youku.com/v_show/id_XMTUwNDA4ODY2NA==.html" placeholder="http://v.youku.com/v_show/id_XMTUwNDA4ODY2NA==.html">
+              </div>
+            </div>
+            <div class="form-group" id="test-play">
+              <iframe src="index.php?url=" width="100%" scrolling="no" height="400" align="middle" frameborder="no" hspace="0" vspace="0" marginheight="0" marginwidth="0" allowfullscreen="true" name="tv"></iframe>
+            </div>
+            <input type="button" id="submit-test" class="btn btn-primary btn-block" value="播 放">
+          </div>
+          <include file="footer"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript">
+  $("#submit-test").on("click", function() {
+    var url = $("#a-test").val();
+    if(url == ""){
+      msg('请输入测试站点播放地址');
+    } else {
+      $("#test-play").html('<iframe src="index.php?url='+url+'" width="100%" scrolling="no" height="400" align="middle" frameborder="no" hspace="0" vspace="0" marginheight="0" marginwidth="0" allowfullscreen="true" name="tv"></iframe>');
+    }
+  });    
+</script>
+<include file="script"/>
+</html>

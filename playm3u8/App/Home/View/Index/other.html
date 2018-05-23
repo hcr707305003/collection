@@ -1,0 +1,93 @@
+<include file="header" />
+<body style="background-color: #f6f6f6;">
+  <include file="navbar" />
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h2>其他设置配置</h2>
+            <br>
+            <div class="form-group">
+              <label class="control-label">防盗提示</label>
+              <div class="control-group">
+                <input class="form-control" id="referer_msg" type="text" value="" placeholder="默认为空"></div>
+            </div>
+            <div class="form-group">
+              <label class="control-label btn-default" data-toggle="tooltip" data-placement="right" title="默认为100%*100%">设置播放器宽高</label>
+              <div class="control-group">
+                <input class="form-control" id="width_height" type="text" value="" placeholder=""></div>
+            </div>
+            <div class="form-group">
+              <label class="control-label btn-default" data-toggle="tooltip" data-placement="right" title="取消设置为 null">播放器右上角LOGO路径（例如:App/Home/Public/player/logo/cklogo.png）</label>
+              <div class="control-group">
+                <input class="form-control" id="playm3u8_logo" type="text" value="" placeholder=""></div>
+            </div>
+            <div class="form-group">
+              <label class="control-label btn-default" data-toggle="tooltip" data-placement="right" title="(一)、水平对齐方式，0是左，1是中，2是右。(二)、垂直对齐方式，0是上，1是中，2是下。(三)、水平偏移量。(四)、垂直偏移量 ">播放器右上角LOGO位置调整</label>
+              <div class="control-group">
+                <input class="form-control" id="pm_logo" type="text" value="" placeholder=""></div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">插件灾难性错误提示,设置了所有的错误提示都会是这个</label>
+              <div class="control-group">
+                <input class="form-control" id="error_msg" type="text" value="" placeholder="默认为空"></div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">指定二维码跳转地址,如果这里设置了就只会对这个地址有效</label>
+              <div class="control-group">
+                <input class="form-control" id="qrcode_url" type="text" value="" placeholder="http://www.playm3u8.com"></div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">被盗用自动跳转到指定网站(为空不跳转,设置了防盗提示就不会提示)</label>
+              <div class="control-group">
+                <input class="form-control" id="referer_url" type="text" value="" placeholder="http://www.playm3u8.com"></div>
+            </div>
+            <input type="button" id="submit-other" class="btn btn-primary btn-block" value="提交修改">
+          </div>
+          <include file="footer"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript">
+    var config = eval("(" + '{:json_encode($config)}' + ")");
+    $("#referer_msg").val(config.referer_msg);
+    $("#width_height").val(config.width_height.join('*'));
+    $("#playm3u8_logo").val(config.playm3u8_logo);
+    $("#pm_logo").val(config.pm_logo);
+    $("#error_msg").val(config.error_msg);
+    $("#qrcode_url").val(config.qrcode_url);
+    $("#referer_url").val(config.referer_url);
+    $("#submit-other").on("click",  function() {
+    var width_height  = $("#width_height").val();
+    var playm3u8_logo = $("#playm3u8_logo").val();
+    var pm_logo       = $("#pm_logo").val();
+    if (width_height == "" || playm3u8_logo == "" || pm_logo == "") {
+      msg('修改信息有误！');
+    } else {
+      $.post("index.php?a=other", {
+        "referer_msg": $("#referer_msg").val(),
+        "width_height": $("#width_height").val(),
+        "playm3u8_logo": $("#playm3u8_logo").val(),
+        "pm_logo": $("#pm_logo").val(),
+        "error_msg": $("#error_msg").val(),
+        "qrcode_url": $("#qrcode_url").val(),
+        "referer_url": $("#referer_url").val(),
+      },
+      function(data) {
+        if (data.code != 200) {
+          msg('添加失败！');
+          return false;
+        } else {
+          msg(data.msg,5);
+        }
+      },
+      "json").error(function() {
+        msg('请求超时，或数据有误，请重试！');
+      });
+    }
+  });
+</script>
+<include file="script" /></html>

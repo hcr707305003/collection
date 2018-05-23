@@ -1,0 +1,59 @@
+<include file="header"/>
+<body style="background-color: #f6f6f6;">
+    <div class="container">
+        <br><br><br><br><br>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+              <div class="panel panel-default">
+                  <div class="panel-body">
+                      <h2>PlayM3u8插件后台</h2><br>
+                      <div class="form-group">
+                          <label class="control-label">Apikey</label>
+                          <div class="control-group">
+                              <input class="form-control" id="apikey" type="text" name="" value="" placeholder="">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label">Secretkey</label>
+                          <div class="control-group">
+                              <input class="form-control" id="secretkey" type="text" name="" value="" placeholder="">
+                          </div>
+                      </div>
+                      <input type="button" id="submit-login" class="btn btn-primary btn-block" value="进入后台">
+                  </div>
+                  <include file="footer"/>
+              </div>
+          </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+  $("#submit-login").on("click", function() {
+      var apikey    = $("#apikey").val();
+      var secretkey = $("#secretkey").val();
+      if(apikey == "" || secretkey == ""){
+        msg('请输入apikey和secretkey！',5);
+        return false;
+      }
+      if(apikey.length != 16){
+        msg('输入apikey格式错误!');
+        return false
+      }
+      if(secretkey.length != 32){
+        msg('输入secretkey格式错误!');
+        return false;
+      }
+      $.post("index.php?a=login", {"apikey":apikey,"secretkey":secretkey},
+      function(data){
+          if(data.code != 200){
+              msg(data.msg); return false;
+          }else{
+            window.location.href = 'index.php?a=admin';
+          }
+      },"json").error(function() { 
+          msg("请求超时，或数据有误，请重试！");
+      });
+  });
+</script>
+<include file="script"/>
+</html>

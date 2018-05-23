@@ -1,0 +1,3 @@
+<?php
+//000000000020a:6:{s:4:"code";i:200;s:6:"source";s:4:"sohu";s:11:"request_url";s:44:"http://tv.sohu.com/20180112/n600346200.shtml";s:6:"result";a:6:{s:5:"files";s:161:"http://t1.060dy.com/playm3u8/index.php?a=m3u8&sign=af7619c1e7a4cf55523aecee5085e8d9&type=sohu&key=20769ba396b75ba5e55572cb43f4bdbb&t2=20&uid=000712&t1=1523352417";s:9:"video_img";s:82:"http://photocdn.tv.sohu.com/img/20180112/vrs97012905_1515720789821_2Ac9I_pic22.jpg";s:9:"play_type";s:4:"m3u8";s:10:"definition";i:2;s:14:"definitionList";s:23:"1标清|2高清|3超清";s:3:"vid";s:7:"4453124";}s:7:"message";s:12:"操作正常";s:4:"cost";d:0.44600000000000001;}
+?>
