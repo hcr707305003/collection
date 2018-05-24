@@ -30,7 +30,9 @@ class IqiyiController extends Controller
 	//爱奇艺采集视频
 	public function iqiyi($url="http://cj.tv6.com/mox/inc/qiyi.php")
 	{	
-		$path = $url."?ac=videolist&rid=&h=24&pg=";//爱奇艺地址
+		$url = 'http://cj.tv6.com/mox/inc/mgtv.php';
+		$url = empty($url)?$_REQUEST['url']:$url;
+		$path = $url."?ac=videolist&rid=&h=&pg=";//爱奇艺地址
 		// $page = simplexml_load_string($this->ff_file_get_contents($path))->list->attributes()->pagecount;
 		for ($i = 0; $i < 1; $i++) {
 			$admin = array();
@@ -39,6 +41,7 @@ class IqiyiController extends Controller
 			$admin['xmltype'] = NULL;
 			$admin['page'] = 1;
 			$vod = $this->vod($admin);
+			var_dump($vod);die;
 			//格式化部份数据字段
 			if ($vod['status'] != 200) {
 				return $vod['infos'];

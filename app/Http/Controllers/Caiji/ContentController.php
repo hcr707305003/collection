@@ -311,7 +311,7 @@ class ContentController extends Controller
 			if ($dd) {
 				preg_match_all('/<a href=[\'|\"](.+?)[\'|\"].*?<\/a>/ism', $dd[0], $dd1);
 				for ($i=0; $i < count($dd1[0]); $i++) { 
-					$data['dd'] = $data['dd'].trim(strip_tags($dd1[0][$i]))."$".$dd1[1][$i]."#";
+					$data['dd'] = $data['dd'].trim(strip_tags($dd1[0][$i]))."$".$dd1[1][$i]."\r";
 				}
 			} else {
 				preg_match('/column_id.*?,/', $content, $vid);
@@ -326,7 +326,7 @@ class ContentController extends Controller
 							if (!$a) {
 								break;
 							}
-							$data['dd'] = $data['dd'].strip_tags($a[0])."$".$a[1]."#";
+							$data['dd'] = $data['dd'].strip_tags($a[0])."$".$a[1]."\r";
 						}
 					} else {
 						$data['dd'] = $url;
@@ -336,20 +336,14 @@ class ContentController extends Controller
 				}
 			}
 		}
-		$data['dd'] = trim($data['dd'], '#');
-		var_dump($data);die;
+		$data['dd'] = trim($data['dd'], '\r');
 		return $data;
-	}
-
-	//芒果tv设置多线程
-	public function find_name_mgtv()
-	{
-
 	}
 
 	//芒果视频采集
 	public function collection_mgtv($url = "")
 	{
+		$agent_ip = 'http://39.109.1.141/MgtvDemo/Spider.php?url=';
 		/*preg_match('/http.*?html/', $url, $url);
 		$url = $url[0];
 		$caiji = new IqiyiController();
@@ -393,13 +387,12 @@ class ContentController extends Controller
 		}*/
 		
 		//被芒果禁ip时的操作
-		$caiji = new IqiyiController();
-		$caiji->iqiyi('http://cj.tv6.com/mox/inc/mgtv.php');
+		// $caiji = new IqiyiController();
+		// $caiji->iqiyi('http://cj.tv6.com/mox/inc/mgtv.php');
 
 		//没被芒果禁ip的操作
-		die;
 		$url = empty($url)?$_REQUEST['url']:$url;
-		$content = $this->ff_file_get_contents($url);
+		$content = $this->ff_file_get_contents($agent_ip.$url);
 		$data = array();
 		preg_match('/<head.*?<\/head>/ism', $content, $a);
 		if (!$a) return '页面无法获取，请重新获取';
@@ -498,7 +491,7 @@ class ContentController extends Controller
 
 		//获取评分
 		$score_url = 'https://vc.mgtv.com/v2/dynamicinfo?vid='.$vid;
-		$score_data = json_decode($this->ff_file_get_contents($score_url));
+		$score_data = json_decode($this->ff_file_get_contents($agent_ip.$score_url));
 		if ($score_data) {
 			$data['score'] = $score_data->data->allStr;
 		}
@@ -512,6 +505,7 @@ class ContentController extends Controller
 		//获取总集数
 		$video_url = 'https://pcweb.api.mgtv.com/episode/list?video_id='.$vid;
 		$video_data = $this->ff_file_get_contents($video_url);
+		// var_dump($video_data);die;
 		if ($video_data) {
 			$video_data = json_decode($video_data);
 			$data['continu'] = $video_data->data->total;
@@ -529,13 +523,13 @@ class ContentController extends Controller
 					if ($page_data->data->list) {
 						$url = 'https://www.mgtv.com';
 						foreach ($page_data->data->list as $key => $value) {
-							$data['dd'] = $data['dd'].$value->t4."$".$url.$value->url."#";
+							$data['dd'] = $data['dd'].$value->t4."$".$url.$value->url."\r";
 						}
 
 					}
 				}
 			}
-			$data['dd'] = rtrim($data['dd'], '#');
+			$data['dd'] = rtrim($data['dd'], '\r');
 		}
 		return $data;
 	}
@@ -616,20 +610,20 @@ class ContentController extends Controller
 					return 1;
 				} else {
 					foreach ($content->data->vlist as $key => $value) {
-						$arr_data .= $value->pd."$".$value->vurl."#";
+						$arr_data .= $value->pd."$".$value->vurl."\r";
 					}
 				}
 			}
-			return rtrim($arr_data, "#");
+			return rtrim($arr_data, "\r");
 		} else if ($state == 1) {
 			return "";
 		} else {
 			$url = 'http://cache.video.iqiyi.com/jp/avlist/'.$albumId.'/1/50/?albumId='.$albumId;
 			$content = json_decode(ltrim($this->ff_file_get_contents($url), "var tvInfoJs="))->data->vlist;
 			foreach ($content as $key => $value) {
-						$arr_data .= $value->pd."$".$value->vurl."#";
+						$arr_data .= $value->pd."$".$value->vurl."\r";
 					}
-			return rtrim($arr_data, "#");
+			return rtrim($arr_data, "\r");
 		}
 	}
 

@@ -67,7 +67,7 @@ class CaijiController extends Controller
 	//爱奇艺采集视频
 	public function iqiyi($url="http://cj.tv6.com/mox/inc/qiyi.php")
 	{	
-		$path = $url."?ac=videolist&rid=&h=24&pg=";//爱奇艺地址
+		$path = $url."?ac=videolist&rid=&h=&pg=";//爱奇艺地址
 		$page = simplexml_load_string($this->ff_file_get_contents($path))->list->attributes()->pagecount;
 		for ($i = 0; $i < intval($page); $i++) {
 			$admin = array();
