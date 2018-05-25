@@ -48,17 +48,24 @@ class ContentController extends Controller
 	//自动采集
 	public function auto_collection()
 	{
-		$update_all_data = DB::table('vods')->where('up_time', '<', date('Y-m-d H:i:s', time()))->limit(500)->where('load_status', '!=', '完结')->where('continu', '>', '0')->get(['name','id','dd','continu', 'load_status', 'state']);
+		$update_all_data = DB::table('vods')->where(function ($query) use ($keyword) {
+        	$query->where('up_time', '<', date('Y-m-d H:i:s', time()))->orWhere('up_time', '=', null);
+    	})->limit(500)->where(function ($query) use ($keyword) {
+        	$query->where('load_status', '!=', '完结')->orWhere('load_status', '=', null);
+    	})->where('continu', '>', '0')->get(['name','id','dd','continu', 'load_status', 'state']);
 		foreach ($update_all_data as $key => $value) {
 			preg_match('/^[正片高清]/', $value->dd, $a);
 			if ($a) {
 				continue;
 			} else {
 				if (count(explode('$', $value->dd)) <= $value->continu) {
+					echo 11;
 					$a = str_replace(['\r', '#'], '#', $value->dd);
 					preg_match('/http.*?html/', $a, $b);
 					if ($b) {
-						$collection = $this->collection_content($b[0]);
+						$collection = $this->collection_content('http://www.iqiyi.com/v_19rrdkbu90.html');
+						var_dump($collection);
+						die;
 						if ($collection['type_name']) {
 							$type_name_find_all_data = $this->get_all_resource($collection['type_name']);
 							if ($type_name_find_all_data == "暂无数据!") {
@@ -607,7 +614,8 @@ class ContentController extends Controller
 				if (!$content->data) {
 					return 1;
 				} else if (!$content->data->vlist) {
-					return 1;
+					continue;
+
 				} else {
 					foreach ($content->data->vlist as $key => $value) {
 						$arr_data .= $value->pd."$".$value->vurl."\r";

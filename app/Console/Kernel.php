@@ -15,6 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\caiji::class,
         Commands\iqiyi::class,
+        Commands\mgtv::class,
+        Commands\qqtv::class,
     ];
 
     /**

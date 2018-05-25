@@ -1,14 +1,13 @@
 <?php
-	
+
 namespace App\Http\Controllers\Caiji;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Caiji\ContentController;
+use Illuminate\Support\Facades\DB;
 
-class IqiyiController extends Controller
+class mgtvController extends Controller
 {
 	public function __construct(){
 		set_time_limit(0);
@@ -27,10 +26,10 @@ class IqiyiController extends Controller
 		;
 	}
 
-	//爱奇艺采集视频
-	public function iqiyi($url="http://cj.tv6.com/mox/inc/qiyi.php")
+	//芒果采集视频
+	public function collection_mgtv($url="http://cj.tv6.com/mox/inc/qiyi.php")
 	{	
-		// $url = 'http://cj.tv6.com/mox/inc/mgtv.php';
+		$url = 'http://cj.tv6.com/mox/inc/mgtv.php';
 		$url = empty($url)?$_REQUEST['url']:$url;
 		$path = $url."?ac=videolist&rid=&h=24&pg=";//爱奇艺地址
 		// $page = simplexml_load_string($this->ff_file_get_contents($path))->list->attributes()->pagecount;
@@ -193,17 +192,20 @@ class IqiyiController extends Controller
 				$video_data['load_status'] = $resource_data['load_status'];
 
 			}
-			// var_dump($video_data);die;
-			if (intval($value['vod_continu']) == 0) {
-				//判断数据库是否存在该，如果不存在则插入，存在则更新视频源(这里的视频审核的状态不一样)
-	        	$this->insert_into($video_data,'film');
-			} else {//走这里的都是连载直接插入
-				// $video_data['status'] = 5;
-				// $video_data['vod_status'] = 5;
-	        	$this->insert_into($video_data);
+			$select_db = DB::table('vods')->where('name', 'like', '%'.$video_data['name'].'%')->get();
+			if ($select_db == "") {
+				if (intval($value['vod_continu']) == 0) {
+					//判断数据库是否存在该，如果不存在则插入，存在则更新视频源(这里的视频审核的状态不一样)
+		        	$this->insert_into($video_data,'film');
+				} else {//走这里的都是连载直接插入
+					// $video_data['status'] = 5;
+					// $video_data['vod_status'] = 5;
+		        	$this->insert_into($video_data);
+				}
 			}
 	    }
 	}
+
 
 	//获取资源站数据
 	public function auto_collection($collection)

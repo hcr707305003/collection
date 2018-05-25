@@ -14,6 +14,8 @@
 // Route::get('/{url}', 'Caiji\CaijiController@apis');
 Route::get('zuidazy', 'Caiji\resourceController@zuidazy');
 Route::get('yongjiuzy', 'Caiji\resourceController@yongjiuzy');
+Route::get('mgtv', 'Caiji\mgtvController@collection_mgtv');
+Route::get('qqtv', 'Caiji\qqtvController@qqtv');
 
 
 Route::get('iqiyi', 'Caiji\IqiyiController@iqiyi');
